@@ -4,7 +4,9 @@ import seaborn as sns
 import warnings
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
+from sklearn.preprocessing import LabelEncoder, OrdinalEncoder, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
 
 def init():
     global df,test_ID,train_ID
@@ -32,6 +34,21 @@ def NormalizeData():
     df[passenger_cols] = df[passenger_cols].apply(LabelEncoder().fit_transform())
     df.head()
 
+
+def LabelEncoderData():
+    passenger = ['CryoSleep','VIP']
+    df[passenger] = df[passenger].apply(LabelEncoder().fit_transform)
+    print(df['VIP'].head(10))
+
+def OneHotEncoderData():
+
+
+    df_transformed = pd.get_dummies(df,columns=['HomePlanet', 'Destination'])
+
+    pd.set_option('display.max_columns', None)
+    print(df_transformed.head(10))
+
+
 def visualizeData():
     init()
 
@@ -46,10 +63,15 @@ def visualizeData():
     print(df['Cabin'].isnull().sum())
 
     print("\n\n variable aprés traitement")
-    normalizeVar()
+
+
 
     print(df['HomePlanet'].value_counts())
     print(df['CryoSleep'].value_counts())
+    print('\n Label Encoder :')
+    LabelEncoderData()
+    print('\n OneHotEncoder :')
+    OneHotEncoderData()
 
 visualizeData()
 # NormalizeData()
